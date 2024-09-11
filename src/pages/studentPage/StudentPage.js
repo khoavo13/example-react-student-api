@@ -18,12 +18,11 @@ import { toast } from "react-toastify";
 
 export default function StudentPage() {
   const [modal, setModal] = useState(false);
-  const [show, setShow] = useState(false);
   const [student, setStudent] = useState({
     ten: "",
     thanhPho: "",
     xepLoai: "",
-    ngaySinh: "01-08-2000", // Initial format: DD-MM-YYYY
+    ngaySinh: "23-12-2000", // Initial format: DD-MM-YYYY
   });
 
   const { status, message, error } = useSelector((state) => state.student);
@@ -47,7 +46,7 @@ export default function StudentPage() {
     if (name === "ngaySinh") {
       setStudent((prevStudent) => ({
         ...prevStudent,
-        [name]: convertDateToDDMMYYYY(value),
+        [name]: value,
       }));
     } else {
       setStudent((prevStudent) => ({
@@ -141,7 +140,7 @@ export default function StudentPage() {
               id="ngaySinh"
               name="ngaySinh"
               type="date"
-              value={convertDateToYYYYMMDD(student.ngaySinh)} // Convert date format for input
+              value={student.ngaySinh} // Convert date format for input
               onChange={handleChange}
             />
           </FormGroup>

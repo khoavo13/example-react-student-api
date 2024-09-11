@@ -1,7 +1,6 @@
 import { Button, Container, Table, Alert, Input } from "reactstrap";
 import { useDispatch, useSelector } from 'react-redux';
 import { getAll, deleteStudent, resetStatusAndMessage, editStudent } from "../../redux/studentSlice";
-import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ReactPaginate from 'react-paginate';
 
@@ -12,7 +11,7 @@ export default function Student() {
         setCurrentPage(event.selected);
     };
     const dispatch = useDispatch();
-    const { totalPages, students, status, message, error } = useSelector((state) => state.student);
+    const { totalPages, students, status, message } = useSelector((state) => state.student);
 
     const limit = 5;
     useEffect(() => {
@@ -62,36 +61,34 @@ export default function Student() {
     const [EStudent, setEStudent] = useState({ id: "", ten: "", thanhPho: "", ngaySinh: "", xepLoai: "" })
     const [studentEdit, setStudentEdit] = useState({ isEdit: false, id: "" })
     const handle_edit = (id, item) => {
-        console.log(item)
         setStudentEdit({ isEdit: true, id })
         setEStudent(item)
-       
     }
     const handle_save = (id) => {
         dispatch(editStudent({
             id,
             student: {
                 ...EStudent,
-                ngaySinh: convertDateToDDMMYYYY(EStudent.ngaySinh), // Sử dụng định dạng YYYY-MM-DD
+                ngaySinh: EStudent.ngaySinh, // Sử dụng định dạng YYYY-MM-DD
                 xepLoai: EStudent.xepLoai // Sử dụng giá trị phù hợp với enum
             }
-
-        })
-
-        );
+        }))
+    //     .then(() => {
+    //         dispatch(getAll({ currentPage, limit }));
+    // })
         setStudentEdit({ isEdit: false, id :""})
-
     }
     const convertDateToYYYYMMDD = (date) => {
+        console.log("convertDateToYYYYMMDD: " + date)
         const [day, month, year] = date.split('-');
         return `${year}-${month}-${day}`;
     };
 
     const convertDateToDDMMYYYY = (date) => {
+        console.log("convertDateToDDMMYYYY: " + date)
         const [year, month, day] = date.split('-');
         return `${day}-${month}-${year}`;
     };
-    console.log(EStudent)
     return (
         <div className="products">
            
@@ -121,7 +118,10 @@ export default function Student() {
                                 <td>
                                     {studentEdit.isEdit && item.id === studentEdit.id ?
                                         <Input type="hidden" value={EStudent.id} 
-                                            onChange={(e) => setEStudent({ ...EStudent, id: e.target.value })}
+                                            onChange={(e) => {
+                                                setEStudent({ ...EStudent, id: e.target.value })
+                                                console.log("Ngay trong input: " + e.target.value)
+                                            }}
                                         />
                                         :
                                         item.id
@@ -149,7 +149,6 @@ export default function Student() {
                                     {
                                         studentEdit.isEdit && item.id === studentEdit.id ?
                                             <Input
-
                                                 type="date"
                                                 value={EStudent.ngaySinh} 
                                                 onChange={(e) => setEStudent({ ...EStudent, ngaySinh: e.target.value })}

@@ -7,10 +7,6 @@ import {
   Nav,
   NavItem,
   NavLink,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
   NavbarText,
 } from 'reactstrap';
 
@@ -22,7 +18,7 @@ function Header() {
   return (
     <div>
       <Navbar expand="sm" >
-        <NavbarBrand href="/">TN</NavbarBrand>
+        <NavbarBrand href="/">KV</NavbarBrand>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className="me-auto" navbar>
@@ -36,7 +32,7 @@ function Header() {
             </NavItem>
            
           </Nav>
-          <NavbarText>STan Nguyen</NavbarText>
+          <NavbarText>Khoa Vo</NavbarText>
         </Collapse>
       </Navbar>
     </div>
