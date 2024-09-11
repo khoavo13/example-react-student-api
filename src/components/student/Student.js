@@ -26,7 +26,7 @@ export default function Student() {
             const timer = setTimeout(() => {
                 setShowMessage(false);
                 dispatch(resetStatusAndMessage()); // Reset status and message
-            }, 2000);
+            }, 20000);
 
             return () => clearTimeout(timer);
         }
@@ -72,7 +72,7 @@ export default function Student() {
             id,
             student: {
                 ...EStudent,
-                ngaySinh: EStudent.ngaySinh, // Sử dụng định dạng YYYY-MM-DD
+                ngaySinh: convertDateToYYYYMMDD(EStudent.ngaySinh), // Sử dụng định dạng YYYY-MM-DD
                 xepLoai: EStudent.xepLoai // Sử dụng giá trị phù hợp với enum
             }
 
@@ -155,7 +155,7 @@ export default function Student() {
                                                 onChange={(e) => setEStudent({ ...EStudent, ngaySinh: e.target.value })}
                                             />
                                             :
-                                            item.ngaySinh
+                                            convertDateToDDMMYYYY(item.ngaySinh)
 
                                     }
                                 </td>
