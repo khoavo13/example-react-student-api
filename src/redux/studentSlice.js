@@ -36,7 +36,6 @@ export const deleteStudent= createAsyncThunk('student/deleteStudent', async (id,
 export const editStudent= createAsyncThunk('student/editProduct', async ({id,student},thunkAPI) => {
   const url= BASE_URL+`/student/${id}`;
   try {
-    console.log(student)
     const response = await axios.put(url,student);
     return response.data; // Trả về dữ liệu từ phản hồi
   } catch (error) {

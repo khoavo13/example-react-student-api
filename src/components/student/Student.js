@@ -72,7 +72,7 @@ export default function Student() {
             id,
             student: {
                 ...EStudent,
-                ngaySinh: convertDateToYYYYMMDD(EStudent.ngaySinh), // Sử dụng định dạng YYYY-MM-DD
+                ngaySinh: convertDateToDDMMYYYY(EStudent.ngaySinh), // Sử dụng định dạng YYYY-MM-DD
                 xepLoai: EStudent.xepLoai // Sử dụng giá trị phù hợp với enum
             }
 
@@ -155,7 +155,7 @@ export default function Student() {
                                                 onChange={(e) => setEStudent({ ...EStudent, ngaySinh: e.target.value })}
                                             />
                                             :
-                                            convertDateToDDMMYYYY(item.ngaySinh)
+                                            item.ngaySinh
 
                                     }
                                 </td>
