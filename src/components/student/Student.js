@@ -46,7 +46,7 @@ export default function Student() {
 
     const convertToValue = (enumCode) => {
         switch (enumCode) {
-            case "Gioi":
+            case "GIOI":
                 return XepLoaiEnum.GIOI;
             case "KHA":
                 return XepLoaiEnum.KHA;
@@ -94,8 +94,6 @@ export default function Student() {
 
     return (
         <div className="products">
-           
-            <Container>
                 {showMessage && (
                     <Alert color={status === 200 ? "success" : "danger"}>
                         {message}
@@ -227,7 +225,6 @@ export default function Student() {
                     breakLinkClassName={'page-link'}
                     activeClassName={'active'}
                 />
-            </Container>
         </div>
     );
 }

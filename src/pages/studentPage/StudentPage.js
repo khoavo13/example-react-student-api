@@ -4,6 +4,7 @@ import Student from "../../components/student/Student";
 import {
   Alert,
   Button,
+  Container,
   FormGroup,
   Input,
   Label,
@@ -21,7 +22,7 @@ export default function StudentPage() {
   const [student, setStudent] = useState({
     ten: "",
     thanhPho: "",
-    xepLoai: "",
+    xepLoai: "GIOI",
     ngaySinh: "23-12-2000", // Initial format: DD-MM-YYYY
   });
 
@@ -43,6 +44,7 @@ export default function StudentPage() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    console.log("value ngay: " + value)
     if (name === "ngaySinh") {
       setStudent((prevStudent) => ({
         ...prevStudent,
@@ -79,7 +81,9 @@ export default function StudentPage() {
 
   return (
     <div>
+     
       <Header />
+      <Container>
       <Button onClick={toggle} className="btn btn-success">
         Add new student
       </Button>
@@ -154,6 +158,7 @@ export default function StudentPage() {
           </Button>
         </ModalFooter>
       </Modal>
+      </Container>
     </div>
   );
 }
