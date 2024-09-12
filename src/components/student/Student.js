@@ -12,6 +12,7 @@ export default function Student() {
     };
     const dispatch = useDispatch();
     const { totalPages, students, status, message } = useSelector((state) => state.student);
+    const [searchTerm, setSearchTerm] = useState("")
 
     const limit = 5;
     useEffect(() => {
@@ -89,6 +90,8 @@ export default function Student() {
         const [year, month, day] = date.split('-');
         return `${day}-${month}-${year}`;
     };
+    const filterStudents = students && students.filter(student => student.ten.toLowerCase().includes(searchTerm.toLowerCase()))
+
     return (
         <div className="products">
            
@@ -98,7 +101,7 @@ export default function Student() {
                         {message}
                     </Alert>
                 )}
-
+                <Input type = "text" placeholder="Search" className="my-3" value={searchTerm} onChange={e => setSearchTerm(e.target.value)}/>
                 <Table hover>
                     <thead>
                         <tr>
@@ -112,7 +115,7 @@ export default function Student() {
                         </tr>
                     </thead>
                     <tbody>
-                        {students && students.map((item, index) => (
+                        {filterStudents && filterStudents.map((item, index) => (
                             <tr key={index} className={studentEdit.isEdit && item.id === studentEdit.id ? "student-item active" : "student-item"}>
                                 <th scope="row">{index + 1}</th>
                                 <td>
