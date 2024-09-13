@@ -77,12 +77,22 @@ export const searchStudentXepLoai = createAsyncThunk('student/searchStudentXepLo
   }
 }); 
 
+export const search = createAsyncThunk('student/search', async ({xepLoai, ten, thanhPho, startYear, endYear, currentPage, limit},thunkAPI) => {
+  const url= BASE_URL+`/student/search?xepLoai=${xepLoai}&ten=${ten}&thanhPho=${thanhPho}&startYear=${startYear}&endYear=${endYear}&page=${currentPage}&size=${limit}`;
+  try {
+    const response = await axios.get(url);
+    return response.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.response.data); // Trả về lỗi nếu có
+  }
+}); 
+
 const studentSlice = createSlice({
   name: 'student',
   initialState: {
     status: 'idle',
     error: null,
-    students:null,
+    students: null,
     totalPages:10,
     message:"",
   },
@@ -155,6 +165,15 @@ const studentSlice = createSlice({
         state.students = action.payload.data
       })
       .addCase(searchStudentXepLoai.rejected, (state, action) => {
+        state.status=action.payload.status
+        state.message=action.payload.message
+        state.error=action.payload.data
+      })
+      .addCase(search.fulfilled, (state, action) => {
+        state.students = action.payload.data.students
+        state.totalPages = action.payload.data.totalPages
+      })
+      .addCase(search.rejected, (state, action) => {
         state.status=action.payload.status
         state.message=action.payload.message
         state.error=action.payload.data

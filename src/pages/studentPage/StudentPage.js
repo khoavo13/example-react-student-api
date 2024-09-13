@@ -44,7 +44,6 @@ export default function StudentPage() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log("value ngay: " + value)
     if (name === "ngaySinh") {
       setStudent((prevStudent) => ({
         ...prevStudent,

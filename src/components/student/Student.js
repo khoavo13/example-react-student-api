@@ -8,6 +8,7 @@ import {
   searchStudentByYear,
   searchStudents,
   searchStudentXepLoai,
+  search,
 } from "../../redux/studentSlice";
 import { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
@@ -97,38 +98,45 @@ export default function Student() {
     setStudentEdit({ isEdit: false, id: "" });
   };
   const convertDateToYYYYMMDD = (date) => {
-    console.log("convertDateToYYYYMMDD: " + date);
     const [day, month, year] = date.split("-");
     return `${year}-${month}-${day}`;
   };
 
   const convertDateToDDMMYYYY = (date) => {
-    console.log("convertDateToDDMMYYYY: " + date);
     const [year, month, day] = date.split("-");
     return `${day}-${month}-${year}`;
   };
-  const filterStudents =
-    students &&
-    students.filter((student) =>
-      student.ten.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+  // const filterStudents =
+  //   students &&
+  //   students.filter((student) =>
+  //     student.ten.toLowerCase().includes(searchTerm.toLowerCase())
+  //   );
   const [startYear, setStartYear] = useState(2000);
   const [endYear, setEndYear] = useState(2001);
   const handleSearchByYear = () => {
-    console.log("Start handleSearchByYear");
     if (startYear && endYear) {
-      console.log("searchStudentByYear");
       dispatch(searchStudentByYear({ startYear, endYear }));
     }
   };
 
-  const handle_search_api = ()=>{
-    dispatch(searchStudents(searchApi))
-  }
+  const handle_search_api = () => {
+    dispatch(searchStudents(searchApi));
+  };
 
-  const handle_search_xepLoai = (e)=> {
-    dispatch(searchStudentXepLoai(e.target.value))
-  }
+  const handle_search_xepLoai = (e) => {
+    dispatch(searchStudentXepLoai(e.target.value));
+  };
+
+  const [studentSearch, setStudentSearch] = useState({
+    xepLoai: "GIOI",
+    ten: "",   
+    startYear: 2000,
+    endYear: 2001,
+  });
+
+  useEffect(() => {
+    dispatch(search({...studentSearch, currentPage, limit }));
+  }, [studentSearch]);
 
   return (
     <div className="products">
@@ -147,7 +155,7 @@ export default function Student() {
         />
         <Button onClick={handleSearchByYear}>Search</Button>
       </div>
-      
+
       <Input
         type="text"
         placeholder="Search Reactjs"
@@ -155,48 +163,90 @@ export default function Student() {
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
-      <Input type="text" placeholder="Search API" className="my-3" value={searchApi} onChange={e => setSearchApi(e.target.value)} onKeyDown={e => {
-        if (e.key == "Enter"){
-            handle_search_api()
-        }
-      }}/>
-    <Input
-      id="searchXepLoai"
-      name="xepLoai"
-      type="select"
-      className="my-3"
-      onChange={handle_search_xepLoai}
-    >
-      <option value="GIOI">
-        Giỏi
-      </option>
-      <option value="KHA">
-        Khá
-      </option>
-      <option value="TRUNG_BINH">
-        Trung bình
-      </option>
-      <option value="YEU">
-        Yếu
-      </option>
-    </Input>
+      <Input
+        type="text"
+        placeholder="Search API"
+        className="my-3"
+        value={searchApi}
+        onChange={(e) => setSearchApi(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key == "Enter") {
+            handle_search_api();
+          }
+        }}
+      />
+      <Input
+        id="searchXepLoai"
+        name="xepLoai"
+        type="select"
+        className="my-3"
+        onChange={handle_search_xepLoai}
+      >
+        <option value="GIOI">Giỏi</option>
+        <option value="KHA">Khá</option>
+        <option value="TRUNG_BINH">Trung bình</option>
+        <option value="YEU">Yếu</option>
+      </Input>
+
+      <div className="searchAll border border-success p-4 my-2">
+        <div>
+          <Input
+            id="xepLoaiAll"
+            name="xepLoai"
+            type="select"
+            value={studentSearch.xepLoai}
+            onChange={e => setStudentSearch({...studentSearch, xepLoai: e.target.value})}
+          >
+            <option value="GIOI">Giỏi</option>
+            <option value="KHA">Khá</option>
+            <option value="TRUNG_BINH">Trung bình</option>
+            <option value="YEU">Yếu</option>
+          </Input>
+        </div>
+        <div className="my-3 d-flex">
+          <Input
+            type="number"
+            name="startYear"
+            value={studentSearch.startYear}
+            onChange={e => setStudentSearch({...studentSearch, startYear: e.target.value})}
+            className="mr-2"
+          />
+          <Input
+            type="number"
+            name="endYear"
+            value={studentSearch.endYear}
+            onChange={e => setStudentSearch({...studentSearch, endYear: e.target.value})}
+            className="mr-2"
+          />
+        </div>
+        <div>
+          <Input
+            id="tenAll"
+            name="ten"
+            type="text"
+            value={studentSearch.ten}
+            onChange={e => setStudentSearch({...studentSearch, ten: e.target.value})}
+          />
+        </div>
+      </div>
+
       {showMessage && (
         <Alert color={status === 200 ? "success" : "danger"}>{message}</Alert>
       )}
       {error && (
-          <Alert color="danger">
-            <ul>
-              {error.map((error, index) => (
-                <li key={index}>{error}</li>
-              ))}
-            </ul>
-          </Alert>
-        )}
+        <Alert color="danger">
+          <ul>
+            {error.map((error, index) => (
+              <li key={index}>{error}</li>
+            ))}
+          </ul>
+        </Alert>
+      )}
       <Table hover>
         <thead>
           <tr>
             <th>#</th>
-            <th> ID</th>
+            <th>ID</th>
             <th>Tên</th>
             <th>Thành phố</th>
             <th>Ngày sinh</th>
@@ -205,7 +255,7 @@ export default function Student() {
           </tr>
         </thead>
         <tbody>
-          {students &&
+          {students && Array.isArray(students) &&
             students.map((item, index) => (
               <tr
                 key={index}
@@ -223,7 +273,6 @@ export default function Student() {
                       value={EStudent.id}
                       onChange={(e) => {
                         setEStudent({ ...EStudent, id: e.target.value });
-                        console.log("Ngay trong input: " + e.target.value);
                       }}
                     />
                   ) : (
