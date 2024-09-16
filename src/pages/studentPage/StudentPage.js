@@ -23,7 +23,7 @@ export default function StudentPage() {
     ten: "",
     thanhPho: "",
     xepLoai: "GIOI",
-    ngaySinh: "23-12-2000", // Initial format: DD-MM-YYYY
+    ngaySinh: "2000-12-23", // Initial format: YYYY-MM-DD
   });
 
   const { status, message, error } = useSelector((state) => state.student);
@@ -87,7 +87,7 @@ export default function StudentPage() {
         Add new student
       </Button>
       <h1>Student page</h1>
-      <Student />
+      <Student/>
       <Modal isOpen={modal} toggle={toggle}>
         {error && (
           <Alert color="danger">

@@ -12,6 +12,7 @@ import {
 } from "../../redux/studentSlice";
 import { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
+import { Link } from "react-router-dom";
 
 export default function Student() {
   const [currentPage, setCurrentPage] = useState(0);
@@ -83,6 +84,7 @@ export default function Student() {
     setEStudent(item);
   };
   const handle_save = (id) => {
+    console.log("OK SAVE STUDENT")
     dispatch(
       editStudent({
         id,
@@ -345,7 +347,7 @@ export default function Student() {
                       className="btn btn-success"
                       onClick={() => handle_save(item.id)}
                     >
-                      Save{" "}
+                      Save
                     </Button>
                   ) : (
                     <>
@@ -368,6 +370,9 @@ export default function Student() {
                         onClick={() => handle_edit(item.id, item)}
                       >
                         <i className="fa-solid fa-pen-to-square"></i>
+                      </Button>
+                      <Button className="btn btn-success">
+                        <Link className="nav-link" to={`/student-detail/${item.id}`}><i class="fa-regular fa-image"></i></Link>
                       </Button>
                     </>
                   )}

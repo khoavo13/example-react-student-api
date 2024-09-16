@@ -55,7 +55,7 @@ export const searchStudents = createAsyncThunk('student/searchStudents', async (
   }
 });
 
-export const   searchStudentByYear = createAsyncThunk('student/searchStudentByYear', async ({startYear, endYear},thunkAPI) => {
+export const searchStudentByYear = createAsyncThunk('student/searchStudentByYear', async ({startYear, endYear},thunkAPI) => {
   const url= BASE_URL+`/student/search4?startYear=${startYear}&endYear=${endYear}`;
   try {
     const response = await axios.get(url);
@@ -87,6 +87,31 @@ export const search = createAsyncThunk('student/search', async ({xepLoai, ten, t
   }
 }); 
 
+export const uploadImage = createAsyncThunk('student/uploadImage', async ({id, formData},thunkAPI) => {
+  const url= BASE_URL+`/student/uploads/${id}`;
+  try {
+    const response = await axios.post(url, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    return response.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.response.data); // Trả về lỗi nếu có
+  }
+}); 
+
+
+export const getAllStudentDetail = createAsyncThunk('student/getAllStudentDetail', async (id,thunkAPI) => {
+  const url= BASE_URL+`/student/getAllImage/${id}`;
+  try {
+    const response = await axios.get(url);
+    return response.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.response.data); // Trả về lỗi nếu có
+  }
+}); 
+
 const studentSlice = createSlice({
   name: 'student',
   initialState: {
@@ -95,6 +120,7 @@ const studentSlice = createSlice({
     students: null,
     totalPages:10,
     message:"",
+    studentDetails: null
   },
   reducers: {
     resetStatusAndMessage: (state) => {
@@ -174,6 +200,21 @@ const studentSlice = createSlice({
         state.totalPages = action.payload.data.totalPages
       })
       .addCase(search.rejected, (state, action) => {
+        state.status=action.payload.status
+        state.message=action.payload.message
+        state.error=action.payload.data
+      })
+      .addCase(uploadImage.fulfilled, (state, action) => {
+        state.status=action.payload.status
+        state.message=action.payload.message
+      })
+      .addCase(getAllStudentDetail.fulfilled, (state, action) => {
+        state.status=action.payload.status
+        state.message=action.payload.message
+        state.studentDetails=action.payload.data
+      })
+
+      .addCase(getAllStudentDetail.rejected, (state, action) => {
         state.status=action.payload.status
         state.message=action.payload.message
         state.error=action.payload.data
