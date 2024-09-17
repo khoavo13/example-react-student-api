@@ -38,7 +38,7 @@ export default function StudentDetail() {
 
   const fetchImage = async (imageUrl) =>{
     try {
-        const url = `http://localhost:8080/student/images/${imageUrl}`
+        const url = `${process.env.REACT_APP_API_URL}/student/images/${imageUrl}`
         const response = await axios.get(url, {
             responseType: 'blob'
         })
